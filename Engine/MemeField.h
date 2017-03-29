@@ -20,7 +20,10 @@ private:
 	public:
 		void SpawnMeme();
 		bool HasMeme() const;
-		void Draw(const Vei2& gridPos, Graphics& gfx);
+		void Draw(const Vei2& screenPos, Graphics& gfx) const;
+		void Reveal();
+		bool IsRevealed();
+
 	private:
 		State state = State::Hidden;
 		bool hasMeme = false;
@@ -28,15 +31,16 @@ private:
 
 public:
 	MemeField(int nMemes);
-	void DrawField(Graphics& gfx);
-	Tile& TileAt(const Vei2 gridPos);
-	const Tile& TileAt(const Vei2& gridPos) const;
-	RectI GetRekt();
-
-public:
+	void Draw(Graphics& gfx) const;
+	void RevealAt(const Vei2& screenPos);
 
 private:
-	static constexpr int tileSize = 16;
+	Tile& TileAt(const Vei2& gridPos);
+	const Tile& TileAt(const Vei2& gridPos) const;
+	Vei2 ScreenToGrid(const Vei2& screenPos) const;
+	RectI GetRekt() const;
+
+private:
 	static constexpr int width = 20;
 	static constexpr int height = 16;
 	Tile field[width * height];

@@ -39,9 +39,14 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	if (wnd.mouse.LeftIsPressed())
+	{
+		std::pair<int,int> p = wnd.mouse.GetPos();
+		field.RevealAt({p.first,p.second});
+	}
 }
 
 void Game::ComposeFrame()
 {
-	field.DrawField(gfx);
+	field.Draw(gfx);
 }
