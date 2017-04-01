@@ -40,7 +40,7 @@ private:
 	};
 
 public:
-	MemeField(const int nMemes);
+	MemeField(const Vei2& center, const int nMemes);
 	void Draw(Graphics& gfx);
 	void PressAt(const Vei2& screenPos);
 	bool RevealAt(const Vei2& screenPos);
@@ -57,14 +57,13 @@ private:
 private:
 	static constexpr int width = 5;
 	static constexpr int height = 5;
-	static constexpr int xOffset = (Graphics::ScreenWidth - (width*SpriteCodex::tileSize)) / 2;
-	static constexpr int yOffset = (Graphics::ScreenHeight - (height*SpriteCodex::tileSize)) / 2;
 	static constexpr int borderSize = 7;
 	static constexpr Color borderColor = { 69,69,69 };
 	int nMemes;
 	int nFlags;
 	int memesFlagged = 0;
-	const Vei2 offset = { xOffset, yOffset };
+	Vei2 center;
+	Vei2 offset = center - Vei2{(width*SpriteCodex::tileSize) / 2, (height*SpriteCodex::tileSize) / 2};
 	Tile field[width * height];
 	FieldState fstate = FieldState::OK;
 };
