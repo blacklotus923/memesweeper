@@ -40,8 +40,8 @@ private:
 public:
 	MemeField(const int nMemes);
 	void Draw(Graphics& gfx) const;
-	void RevealAt(const Vei2& screenPos);
-	void FlagAt(const Vei2& screenPos);
+	bool RevealAt(const Vei2& screenPos);
+	bool FlagAt(const Vei2& screenPos);
 	RectI GetRekt() const;
 	FieldState GetFieldState() const;
 

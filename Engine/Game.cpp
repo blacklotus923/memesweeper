@@ -39,31 +39,42 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	while (!wnd.mouse.IsEmpty())
-	{
-		const Mouse::Event e = wnd.mouse.Read();
-		if (e.GetType() == Mouse::Event::Type::LRelease)
+	
+		while (!wnd.mouse.IsEmpty())
 		{
-			std::pair<int, int> p = e.GetPos();
-			const Vei2 point = { p.first, p.second };
-			if (field.GetRekt().Contains(point))
-			{
-				field.RevealAt(point);
-			}
+			const Mouse::Event e = wnd.mouse.Read();
+				if (e.GetType() == Mouse::Event::Type::LRelease)
+				{
+					std::pair<int, int> p = e.GetPos();
+					const Vei2 point = { p.first, p.second };
+					if (field.GetRekt().Contains(point))
+					{
+						if (field.RevealAt(point))
+						{
+							sndLose.Play();
+						}
+					}
+				}
+				else if (e.GetType() == Mouse::Event::Type::RPress)
+				{
+					std::pair<int, int> p = e.GetPos();
+					const Vei2 point = { p.first, p.second };
+					if (field.GetRekt().Contains(point))
+					{
+						if (field.FlagAt(point))
+						{
+							sndWin.Play();
+						}
+					}
+				}
 		}
-		else if (e.GetType() == Mouse::Event::Type::RPress)
-		{
-			std::pair<int, int> p = e.GetPos();
-			const Vei2 point = { p.first, p.second };
-			if (field.GetRekt().Contains(point))
-			{
-				field.FlagAt(point);
-			}
-		}
-	}
 }
 
 void Game::ComposeFrame()
 {
 	field.Draw(gfx);
+	if (field.GetFieldState() == MemeField::FieldState::Won)
+	{
+		SpriteCodex::DrawWin({ Graphics::ScreenWidth / 2, Graphics::ScreenHeight / 2 }, gfx);
+	}
 }

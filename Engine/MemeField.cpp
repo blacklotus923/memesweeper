@@ -162,7 +162,7 @@ void MemeField::Draw(Graphics & gfx) const
 	}
 }
 
-void MemeField::RevealAt(const Vei2 & screenPos)
+bool MemeField::RevealAt(const Vei2 & screenPos)
 {
 	if (fstate == FieldState::OK)
 	{
@@ -172,12 +172,17 @@ void MemeField::RevealAt(const Vei2 & screenPos)
 		if (!TileAt(gridPos).IsRevealed() && !TileAt(gridPos).IsFlagged())
 		{
 			TileAt(gridPos).Reveal();
-			if (TileAt(gridPos).HasMeme()) fstate = FieldState::GameOver;
+			if (TileAt(gridPos).HasMeme())
+			{
+				fstate = FieldState::GameOver;
+				return true;
+			}
 		}
 	}
+	return false;
 }
 
-void MemeField::FlagAt(const Vei2 & screenPos)
+bool MemeField::FlagAt(const Vei2 & screenPos)
 {
 	if (fstate == FieldState::OK)
 	{
@@ -189,11 +194,16 @@ void MemeField::FlagAt(const Vei2 & screenPos)
 			if (TileAt(gridPos).ToggleFlag())
 			{
 				memesFlagged++;
-				if (memesFlagged == nMemes) fstate = FieldState::Won;
+				if (memesFlagged == nMemes)
+				{
+					fstate = FieldState::Won;
+					return true;
+				}
 			}
 			else memesFlagged--;
 		}
 	}
+	return false;
 }
 
 MemeField::Tile & MemeField::TileAt(const Vei2& gridPos)

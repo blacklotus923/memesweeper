@@ -24,6 +24,7 @@
 #include "Mouse.h"
 #include "Graphics.h"
 #include "MemeField.h"
+#include "Sound.h"
 
 class Game
 {
@@ -44,6 +45,8 @@ private:
 	/********************************/
 	/*  User Variables              */
 	MemeField field;
+	Sound sndWin = { L"Sounds\\win.wav" };
+	Sound sndLose = { L"Sounds\\exploded.wav" };
 	/********************************/
 };
 
@@ -61,7 +64,7 @@ private:
 //Homework:
 //draw grid centered on screen _DONE
 //draw border around grid _DONE
-//add win/lose state and screen
+//add win/lose state and screen _DONE
 //add only as much flags as bombs
 //change mouse click so that holding the mouse "presses" the button, but action taken only when releasing left button
 //and draws tile button in pressed state under mouse while pressed
