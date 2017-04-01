@@ -3,6 +3,7 @@
 #include "RectI.h"
 #include "Graphics.h"
 #include "SpriteCodex.h"
+#include <assert.h>
 #include <random>
 
 class MemeField
@@ -33,12 +34,12 @@ public:
 	MemeField(int nMemes);
 	void Draw(Graphics& gfx) const;
 	void RevealAt(const Vei2& screenPos);
+	RectI GetRekt() const;
 
 private:
 	Tile& TileAt(const Vei2& gridPos);
 	const Tile& TileAt(const Vei2& gridPos) const;
 	Vei2 ScreenToGrid(const Vei2& screenPos) const;
-	RectI GetRekt() const;
 
 private:
 	static constexpr int width = 20;

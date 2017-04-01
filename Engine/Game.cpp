@@ -39,10 +39,27 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (wnd.mouse.LeftIsPressed())
+	while (!wnd.mouse.IsEmpty())
 	{
-		std::pair<int,int> p = wnd.mouse.GetPos();
-		field.RevealAt({p.first,p.second});
+		const Mouse::Event e = wnd.mouse.Read();
+		if (e.GetType() == Mouse::Event::Type::LRelease)
+		{
+			std::pair<int, int> p = e.GetPos();
+			const Vei2 point = { p.first, p.second };
+			if (field.GetRekt().Contains(point))
+			{
+				field.RevealAt(point);
+			}
+		}
+		else if (e.GetType() == Mouse::Event::Type::RPress)
+		{
+			std::pair<int, int> p = e.GetPos();
+			const Vei2 point = { p.first, p.second };
+			if (field.GetRekt().Contains(point))
+			{
+				field.RevealAt(point);
+			}
+		}
 	}
 }
 

@@ -46,3 +46,22 @@ private:
 	MemeField field;
 	/********************************/
 };
+
+//TODO
+
+//Check if mouse is contained by rect of grid (add recti function Contains) _DONE
+//Handle mouse events to get just the left down/ right down event (use while !kbd.mouse.isempty()) _DONE
+//Flag toggle function, isflagged function
+//only flag when not revealed
+//function to get number of memes around tile, function to set neighbor memes for each tile
+//track number of memes nearby per tile
+//draw numbers (add function to spritecodex to take int and draw)
+//draw based on fucked/not fucked
+
+//Homework:
+//draw border around grid
+//draw grid centered on screen
+//add win/lose state and screen
+//add only as much flags as bombs
+//change mouse click so that holding the mouse "presses" the button, but action taken only when releasing left button
+//and draws tile button in pressed state under mouse while pressed

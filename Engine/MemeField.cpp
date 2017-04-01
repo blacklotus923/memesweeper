@@ -70,12 +70,10 @@ void MemeField::Draw(Graphics & gfx) const
 
 void MemeField::RevealAt(const Vei2 & screenPos)
 {
-	if (screenPos.x >= 0 && screenPos.x < width*SpriteCodex::tileSize
-		&& screenPos.y >= 0 && screenPos.y < height*SpriteCodex::tileSize)
-	{
-		Vei2 gridPos = ScreenToGrid(screenPos);
-		if(!TileAt(gridPos).IsRevealed()) TileAt(screenPos / SpriteCodex::tileSize).Reveal();
-	}
+	assert(screenPos.x >= 0 && screenPos.x < width*SpriteCodex::tileSize
+		&& screenPos.y >= 0 && screenPos.y < height*SpriteCodex::tileSize);
+	Vei2 gridPos = ScreenToGrid(screenPos);
+	if(!TileAt(gridPos).IsRevealed()) TileAt(screenPos / SpriteCodex::tileSize).Reveal();
 }
 
 MemeField::Tile & MemeField::TileAt(const Vei2& gridPos)
