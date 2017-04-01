@@ -25,7 +25,7 @@ private:
 		bool HasMeme() const;
 		void Draw(const Vei2& screenPos, const FieldState& fstate, Graphics& gfx) const;
 		void Reveal();
-		bool ToggleFlag();
+		void ToggleFlag();
 		bool IsRevealed() const;
 		bool IsFlagged() const;
 		void SetMemesAround(const int nMemes);
@@ -59,6 +59,7 @@ private:
 	static constexpr int borderSize = 7;
 	static constexpr Color borderColor = { 69,69,69 };
 	int nMemes;
+	int nFlags;
 	int memesFlagged = 0;
 	const Vei2 offset = { xOffset, yOffset };
 	Tile field[width * height];

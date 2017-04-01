@@ -97,12 +97,11 @@ void MemeField::Tile::Reveal()
 	state = State::Revealed;
 }
 
-bool MemeField::Tile::ToggleFlag()
+void MemeField::Tile::ToggleFlag()
 {
 	assert(!IsRevealed());
 	if (IsFlagged())state = State::Hidden;
 	else state = State::Flagged;
-	return HasMeme();
 }
 
 bool MemeField::Tile::IsRevealed() const
@@ -125,7 +124,7 @@ int MemeField::Tile::GetMemesAround() const
 	return memesAround;
 }
 
-MemeField::MemeField(const int nMemes) : nMemes(nMemes)
+MemeField::MemeField(const int nMemes) : nMemes(nMemes), nFlags(nMemes+std::max(1,(int)(nMemes*0.25f)))
 {
 	std::random_device rd;
 	std::mt19937 rng(rd());
@@ -191,16 +190,32 @@ bool MemeField::FlagAt(const Vei2 & screenPos)
 		Vei2 gridPos = ScreenToGrid(screenPos);
 		if (!TileAt(gridPos).IsRevealed())
 		{
-			if (TileAt(gridPos).ToggleFlag())
+			if (!TileAt(gridPos).IsFlagged())
 			{
-				memesFlagged++;
-				if (memesFlagged == nMemes)
+				if (nFlags > 0)
 				{
-					fstate = FieldState::Won;
-					return true;
+					TileAt(gridPos).ToggleFlag();
+					nFlags--;
+					if (TileAt(gridPos).HasMeme())
+					{
+						memesFlagged++;
+						if (memesFlagged == nMemes)
+						{
+							fstate = FieldState::Won;
+							return true;
+						}
+					}
 				}
 			}
-			else memesFlagged--;
+			else
+			{
+				TileAt(gridPos).ToggleFlag();
+				nFlags++;
+				if (TileAt(gridPos).HasMeme())
+				{
+					memesFlagged--;
+				}
+			}
 		}
 	}
 	return false;
