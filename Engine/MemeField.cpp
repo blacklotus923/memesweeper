@@ -124,7 +124,7 @@ void MemeField::Draw(Graphics & gfx) const
 	{
 		for (gridPos.x = 0; gridPos.x < width; ++gridPos.x)
 		{
-			TileAt(gridPos).Draw(gridPos*SpriteCodex::tileSize, fstate, gfx);
+			TileAt(gridPos).Draw((gridPos*SpriteCodex::tileSize)+offset, fstate, gfx);
 		}
 	}
 }
@@ -133,8 +133,8 @@ void MemeField::RevealAt(const Vei2 & screenPos)
 {
 	if (fstate == FieldState::OK)
 	{
-		assert(screenPos.x >= 0 && screenPos.x < width*SpriteCodex::tileSize
-			&& screenPos.y >= 0 && screenPos.y < height*SpriteCodex::tileSize);
+		assert(screenPos.x >= GetRekt().left && screenPos.x < GetRekt().right
+			&& screenPos.y >= GetRekt().top && screenPos.y < GetRekt().bottom);
 		Vei2 gridPos = ScreenToGrid(screenPos);
 		if (!TileAt(gridPos).IsRevealed() && !TileAt(gridPos).IsFlagged())
 		{
@@ -148,10 +148,10 @@ void MemeField::FlagAt(const Vei2 & screenPos)
 {
 	if (fstate == FieldState::OK)
 	{
-		assert(screenPos.x >= 0 && screenPos.x < width*SpriteCodex::tileSize
-			&& screenPos.y >= 0 && screenPos.y < height*SpriteCodex::tileSize);
+		assert(screenPos.x >= GetRekt().left && screenPos.x < GetRekt().right
+			&& screenPos.y >= GetRekt().top && screenPos.y < GetRekt().bottom);
 		Vei2 gridPos = ScreenToGrid(screenPos);
-		if (!TileAt(gridPos).IsRevealed()) TileAt(screenPos / SpriteCodex::tileSize).ToggleFlag();
+		if (!TileAt(gridPos).IsRevealed()) TileAt(gridPos).ToggleFlag();
 	}
 }
 
@@ -167,7 +167,7 @@ const MemeField::Tile & MemeField::TileAt(const Vei2 & gridPos) const
 
 Vei2 MemeField::ScreenToGrid(const Vei2 & screenPos) const
 {
-	return Vei2(screenPos / SpriteCodex::tileSize);
+	return Vei2((screenPos-offset) / SpriteCodex::tileSize);
 }
 
 int MemeField::GetMemesAroundTile(const Vei2 gridPos) const
@@ -192,5 +192,10 @@ int MemeField::GetMemesAroundTile(const Vei2 gridPos) const
 
 RectI MemeField::GetRekt() const
 {
-	return RectI(0,width*SpriteCodex::tileSize,0,height*SpriteCodex::tileSize);
+	return RectI(xOffset, (width*SpriteCodex::tileSize) + xOffset, yOffset, (height*SpriteCodex::tileSize) + yOffset);
+}
+
+MemeField::FieldState MemeField::GetFieldState() const
+{
+	return fstate;
 }

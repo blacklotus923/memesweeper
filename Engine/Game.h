@@ -59,8 +59,8 @@ private:
 //draw based on fucked/not fucked _DONE
 
 //Homework:
+//draw grid centered on screen _DONE
 //draw border around grid
-//draw grid centered on screen
 //add win/lose state and screen
 //add only as much flags as bombs
 //change mouse click so that holding the mouse "presses" the button, but action taken only when releasing left button

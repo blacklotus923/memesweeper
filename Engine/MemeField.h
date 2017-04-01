@@ -43,6 +43,7 @@ public:
 	void RevealAt(const Vei2& screenPos);
 	void FlagAt(const Vei2& screenPos);
 	RectI GetRekt() const;
+	FieldState GetFieldState() const;
 
 private:
 	Tile& TileAt(const Vei2& gridPos);
@@ -53,6 +54,9 @@ private:
 private:
 	static constexpr int width = 20;
 	static constexpr int height = 16;
+	static constexpr int xOffset = (Graphics::ScreenWidth - (width*SpriteCodex::tileSize)) / 2;
+	static constexpr int yOffset = (Graphics::ScreenHeight - (height*SpriteCodex::tileSize)) / 2;
+	const Vei2 offset = { xOffset, yOffset };
 	Tile field[width * height];
 	FieldState fstate = FieldState::OK;
 };
