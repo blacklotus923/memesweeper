@@ -8,6 +8,8 @@
 
 class MemeField
 {
+public:
+	enum class FieldState {OK,GameOver,Won};
 private:
 	class Tile
 	{
@@ -21,7 +23,7 @@ private:
 	public:
 		void SpawnMeme();
 		bool HasMeme() const;
-		void Draw(const Vei2& screenPos, Graphics& gfx) const;
+		void Draw(const Vei2& screenPos, const FieldState& fstate, Graphics& gfx) const;
 		void Reveal();
 		void ToggleFlag();
 		bool IsRevealed() const;
@@ -52,4 +54,5 @@ private:
 	static constexpr int width = 20;
 	static constexpr int height = 16;
 	Tile field[width * height];
+	FieldState fstate = FieldState::OK;
 };
