@@ -25,7 +25,7 @@ private:
 		bool HasMeme() const;
 		void Draw(const Vei2& screenPos, const FieldState& fstate, Graphics& gfx) const;
 		void Reveal();
-		void ToggleFlag();
+		bool ToggleFlag();
 		bool IsRevealed() const;
 		bool IsFlagged() const;
 		void SetMemesAround(const int nMemes);
@@ -38,7 +38,7 @@ private:
 	};
 
 public:
-	MemeField(int nMemes);
+	MemeField(const int nMemes);
 	void Draw(Graphics& gfx) const;
 	void RevealAt(const Vei2& screenPos);
 	void FlagAt(const Vei2& screenPos);
@@ -52,12 +52,14 @@ private:
 	int GetMemesAroundTile(const Vei2 gridPos) const;
 
 private:
-	static constexpr int width = 20;
-	static constexpr int height = 16;
+	static constexpr int width = 5;
+	static constexpr int height = 5;
 	static constexpr int xOffset = (Graphics::ScreenWidth - (width*SpriteCodex::tileSize)) / 2;
 	static constexpr int yOffset = (Graphics::ScreenHeight - (height*SpriteCodex::tileSize)) / 2;
 	static constexpr int borderSize = 7;
 	static constexpr Color borderColor = { 69,69,69 };
+	int nMemes;
+	int memesFlagged = 0;
 	const Vei2 offset = { xOffset, yOffset };
 	Tile field[width * height];
 	FieldState fstate = FieldState::OK;

@@ -13,7 +13,9 @@ bool MemeField::Tile::HasMeme() const
 
 void MemeField::Tile::Draw(const Vei2 & screenPos, const FieldState& fstate, Graphics & gfx) const
 {
-	if (fstate == FieldState::OK)
+	switch (fstate)
+	{
+	case FieldState::OK:
 	{
 		switch (state)
 		{
@@ -30,12 +32,13 @@ void MemeField::Tile::Draw(const Vei2 & screenPos, const FieldState& fstate, Gra
 			break;
 		}
 	}
-	else
+		break;
+	case FieldState::GameOver:
 	{
 		switch (state)
 		{
 		case State::Hidden:
-			if(hasMeme) SpriteCodex::DrawTileBomb(screenPos, gfx);
+			if (hasMeme) SpriteCodex::DrawTileBomb(screenPos, gfx);
 			else SpriteCodex::DrawTileButton(screenPos, gfx);
 			break;
 		case State::Flagged:
@@ -57,6 +60,35 @@ void MemeField::Tile::Draw(const Vei2 & screenPos, const FieldState& fstate, Gra
 			break;
 		}
 	}
+		break;
+	case FieldState::Won:
+	{
+		switch (state)
+		{
+		case State::Hidden:
+			if (hasMeme) SpriteCodex::DrawTileBomb(screenPos, gfx);
+			else SpriteCodex::DrawTileNumber(memesAround, screenPos, gfx);
+			break;
+		case State::Flagged:
+			if (hasMeme)
+			{
+				SpriteCodex::DrawTileButton(screenPos, gfx);
+				SpriteCodex::DrawTileBomb(screenPos, gfx);
+				SpriteCodex::DrawTileFlag(screenPos, gfx);
+			}
+			else
+			{
+				SpriteCodex::DrawTileFlag(screenPos, gfx);
+				SpriteCodex::DrawTileCross(screenPos, gfx);
+			}
+			break;
+		case State::Revealed:
+			SpriteCodex::DrawTileNumber(memesAround, screenPos, gfx);
+			break;
+		}
+	}
+		break;
+	}
 }
 
 void MemeField::Tile::Reveal()
@@ -65,11 +97,12 @@ void MemeField::Tile::Reveal()
 	state = State::Revealed;
 }
 
-void MemeField::Tile::ToggleFlag()
+bool MemeField::Tile::ToggleFlag()
 {
 	assert(!IsRevealed());
-	if (IsFlagged()) state = State::Hidden;
+	if (IsFlagged())state = State::Hidden;
 	else state = State::Flagged;
+	return HasMeme();
 }
 
 bool MemeField::Tile::IsRevealed() const
@@ -92,13 +125,12 @@ int MemeField::Tile::GetMemesAround() const
 	return memesAround;
 }
 
-MemeField::MemeField(int nMemes)
+MemeField::MemeField(const int nMemes) : nMemes(nMemes)
 {
 	std::random_device rd;
 	std::mt19937 rng(rd());
 	std::uniform_int_distribution<int> xDist(0, width - 1);
 	std::uniform_int_distribution<int> yDist(0, height - 1);
-
 	for (int spawned = 0; spawned < nMemes; spawned++)
 	{
 		Vei2 spawnPos;
@@ -152,7 +184,15 @@ void MemeField::FlagAt(const Vei2 & screenPos)
 		assert(screenPos.x >= GetRekt().left && screenPos.x < GetRekt().right
 			&& screenPos.y >= GetRekt().top && screenPos.y < GetRekt().bottom);
 		Vei2 gridPos = ScreenToGrid(screenPos);
-		if (!TileAt(gridPos).IsRevealed()) TileAt(gridPos).ToggleFlag();
+		if (!TileAt(gridPos).IsRevealed())
+		{
+			if (TileAt(gridPos).ToggleFlag())
+			{
+				memesFlagged++;
+				if (memesFlagged == nMemes) fstate = FieldState::Won;
+			}
+			else memesFlagged--;
+		}
 	}
 }
 
