@@ -62,8 +62,7 @@ private:
 	int nMemes;
 	int nFlags;
 	int memesFlagged = 0;
-	Vei2 center;
-	Vei2 offset = center - Vei2{(width*SpriteCodex::tileSize) / 2, (height*SpriteCodex::tileSize) / 2};
+	Vei2 offset;
 	Tile field[width * height];
 	FieldState fstate = FieldState::OK;
 };

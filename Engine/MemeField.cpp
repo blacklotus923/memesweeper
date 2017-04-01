@@ -134,7 +134,11 @@ int MemeField::Tile::GetMemesAround() const
 	return memesAround;
 }
 
-MemeField::MemeField(const Vei2& center, const int nMemes) : center(center), nMemes(nMemes), nFlags(nMemes+std::max(1,(int)(nMemes*0.25f)))
+MemeField::MemeField(const Vei2& center, const int nMemes)
+	:
+	offset(center - Vei2( width*SpriteCodex::tileSize,height*SpriteCodex::tileSize ) / 2),
+	nMemes(nMemes),
+	nFlags(nMemes+std::max(1,(int)(nMemes*0.25f)))
 {
 	std::random_device rd;
 	std::mt19937 rng(rd());
