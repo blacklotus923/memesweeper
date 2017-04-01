@@ -56,6 +56,8 @@ private:
 	static constexpr int height = 16;
 	static constexpr int xOffset = (Graphics::ScreenWidth - (width*SpriteCodex::tileSize)) / 2;
 	static constexpr int yOffset = (Graphics::ScreenHeight - (height*SpriteCodex::tileSize)) / 2;
+	static constexpr int borderSize = 7;
+	static constexpr Color borderColor = { 69,69,69 };
 	const Vei2 offset = { xOffset, yOffset };
 	Tile field[width * height];
 	FieldState fstate = FieldState::OK;
