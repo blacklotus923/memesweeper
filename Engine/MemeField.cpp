@@ -1,4 +1,5 @@
 #include "MemeField.h"
+#include <algorithm>
 
 void MemeField::Tile::SpawnMeme()
 {
@@ -23,7 +24,7 @@ void MemeField::Tile::Draw(const Vei2 & screenPos, Graphics & gfx) const
 		break;
 	case State::Revealed:
 		if (hasMeme) SpriteCodex::DrawTileBomb(screenPos, gfx);
-		else SpriteCodex::DrawTile0(screenPos, gfx);
+		else SpriteCodex::DrawTileNumber(memesAround,screenPos, gfx);
 		break;
 	}
 }
@@ -51,6 +52,16 @@ bool MemeField::Tile::IsFlagged() const
 	return (state == State::Flagged);
 }
 
+void MemeField::Tile::SetMemesAround(const int nMemes)
+{
+	memesAround = nMemes;
+}
+
+int MemeField::Tile::GetMemesAround() const
+{
+	return memesAround;
+}
+
 MemeField::MemeField(int nMemes)
 {
 	std::random_device rd;
@@ -66,6 +77,13 @@ MemeField::MemeField(int nMemes)
 			spawnPos = { xDist(rng), yDist(rng) };
 		} while (TileAt(spawnPos).HasMeme());
 		TileAt(spawnPos).SpawnMeme();
+	}
+	for (Vei2 gridPos = { 0,0 }; gridPos.y < height; ++gridPos.y)
+	{
+		for (gridPos.x = 0; gridPos.x < width; ++gridPos.x)
+		{
+			TileAt(gridPos).SetMemesAround(GetMemesAroundTile(gridPos));
+		}
 	}
 }
 
@@ -110,6 +128,26 @@ const MemeField::Tile & MemeField::TileAt(const Vei2 & gridPos) const
 Vei2 MemeField::ScreenToGrid(const Vei2 & screenPos) const
 {
 	return Vei2(screenPos / SpriteCodex::tileSize);
+}
+
+int MemeField::GetMemesAroundTile(const Vei2 gridPos) const
+{
+	const int xMin = std::max(0, gridPos.x - 1);
+	const int yMin = std::max(0, gridPos.y - 1);
+	const int xMax = std::min(width - 1, gridPos.x + 1);
+	const int yMax = std::min(height -1, gridPos.y + 1);
+
+	int c = 0;
+
+	for (Vei2 gridPos = { xMin,yMin }; gridPos.y <= yMax; ++gridPos.y)
+	{
+		for (gridPos.x = xMin; gridPos.x <= xMax; ++gridPos.x)
+		{
+			if(TileAt(gridPos).HasMeme()) c++;
+		}
+	}
+
+	return c;
 }
 
 RectI MemeField::GetRekt() const

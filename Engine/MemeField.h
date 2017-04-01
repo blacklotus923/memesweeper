@@ -26,10 +26,13 @@ private:
 		void ToggleFlag();
 		bool IsRevealed() const;
 		bool IsFlagged() const;
+		void SetMemesAround(const int nMemes);
+		int GetMemesAround() const;
 
 	private:
 		State state = State::Hidden;
 		bool hasMeme = false;
+		int memesAround = -1;
 	};
 
 public:
@@ -43,6 +46,7 @@ private:
 	Tile& TileAt(const Vei2& gridPos);
 	const Tile& TileAt(const Vei2& gridPos) const;
 	Vei2 ScreenToGrid(const Vei2& screenPos) const;
+	int GetMemesAroundTile(const Vei2 gridPos) const;
 
 private:
 	static constexpr int width = 20;
