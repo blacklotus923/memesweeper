@@ -23,7 +23,9 @@ private:
 		bool HasMeme() const;
 		void Draw(const Vei2& screenPos, Graphics& gfx) const;
 		void Reveal();
-		bool IsRevealed();
+		void ToggleFlag();
+		bool IsRevealed() const;
+		bool IsFlagged() const;
 
 	private:
 		State state = State::Hidden;
@@ -34,6 +36,7 @@ public:
 	MemeField(int nMemes);
 	void Draw(Graphics& gfx) const;
 	void RevealAt(const Vei2& screenPos);
+	void FlagAt(const Vei2& screenPos);
 	RectI GetRekt() const;
 
 private:

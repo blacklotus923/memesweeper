@@ -57,7 +57,7 @@ void Game::UpdateModel()
 			const Vei2 point = { p.first, p.second };
 			if (field.GetRekt().Contains(point))
 			{
-				field.RevealAt(point);
+				field.FlagAt(point);
 			}
 		}
 	}

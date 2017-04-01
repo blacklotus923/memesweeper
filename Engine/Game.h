@@ -51,8 +51,8 @@ private:
 
 //Check if mouse is contained by rect of grid (add recti function Contains) _DONE
 //Handle mouse events to get just the left down/ right down event (use while !kbd.mouse.isempty()) _DONE
-//Flag toggle function, isflagged function
-//only flag when not revealed
+//Flag toggle function, isflagged function _DONE
+//only flag when not revealed _DONE
 //function to get number of memes around tile, function to set neighbor memes for each tile
 //track number of memes nearby per tile
 //draw numbers (add function to spritecodex to take int and draw)
