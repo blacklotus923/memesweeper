@@ -11,7 +11,7 @@ bool MemeField::Tile::HasMeme() const
 	return hasMeme;
 }
 
-void MemeField::Tile::Draw(const Vei2 & screenPos, const FieldState& fstate, Graphics & gfx) const
+void MemeField::Tile::Draw(const Vei2 & screenPos, const FieldState& fstate, Graphics & gfx)
 {
 	switch (fstate)
 	{
@@ -20,7 +20,12 @@ void MemeField::Tile::Draw(const Vei2 & screenPos, const FieldState& fstate, Gra
 		switch (state)
 		{
 		case State::Hidden:
-			SpriteCodex::DrawTileButton(screenPos, gfx);
+			if (!isPressed) SpriteCodex::DrawTileButton(screenPos, gfx);
+			else
+			{
+				SpriteCodex::DrawTilePressed(screenPos, gfx);
+				SetPressed(false);
+			}
 			break;
 		case State::Flagged:
 			SpriteCodex::DrawTileButton(screenPos, gfx);
@@ -97,6 +102,11 @@ void MemeField::Tile::Reveal()
 	state = State::Revealed;
 }
 
+void MemeField::Tile::SetPressed(bool pressed)
+{
+	isPressed = pressed;
+}
+
 void MemeField::Tile::ToggleFlag()
 {
 	assert(!IsRevealed());
@@ -148,7 +158,7 @@ MemeField::MemeField(const int nMemes) : nMemes(nMemes), nFlags(nMemes+std::max(
 	}
 }
 
-void MemeField::Draw(Graphics & gfx) const
+void MemeField::Draw(Graphics & gfx)
 {
 	gfx.DrawRect(GetRekt().GetExpanded(borderSize), borderColor);
 	gfx.DrawRect(GetRekt(), SpriteCodex::baseColor);
@@ -157,6 +167,20 @@ void MemeField::Draw(Graphics & gfx) const
 		for (gridPos.x = 0; gridPos.x < width; ++gridPos.x)
 		{
 			TileAt(gridPos).Draw((gridPos*SpriteCodex::tileSize)+offset, fstate, gfx);
+		}
+	}
+}
+
+void MemeField::PressAt(const Vei2 & screenPos)
+{
+	if (fstate == FieldState::OK)
+	{
+		assert(screenPos.x >= GetRekt().left && screenPos.x < GetRekt().right
+			&& screenPos.y >= GetRekt().top && screenPos.y < GetRekt().bottom);
+		Vei2 gridPos = ScreenToGrid(screenPos);
+		if (!TileAt(gridPos).IsRevealed() && !TileAt(gridPos).IsFlagged())
+		{
+			TileAt(gridPos).SetPressed(true);
 		}
 	}
 }

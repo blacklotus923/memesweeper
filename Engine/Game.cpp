@@ -39,35 +39,41 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	
-		while (!wnd.mouse.IsEmpty())
-		{
-			const Mouse::Event e = wnd.mouse.Read();
-				if (e.GetType() == Mouse::Event::Type::LRelease)
+	const RectI fRekt = field.GetRekt();
+	if (wnd.mouse.LeftIsPressed())
+	{
+		std::pair<int, int> mpos = wnd.mouse.GetPos();
+		const Vei2 mpoint = { mpos.first,mpos.second };
+		if (fRekt.Contains(mpoint)) field.PressAt(mpoint);
+	}
+	while (!wnd.mouse.IsEmpty())
+	{
+		const Mouse::Event e = wnd.mouse.Read();
+			if (e.GetType() == Mouse::Event::Type::LRelease)
+			{
+				std::pair<int, int> p = e.GetPos();
+				const Vei2 point = { p.first, p.second };
+				if (fRekt.Contains(point))
 				{
-					std::pair<int, int> p = e.GetPos();
-					const Vei2 point = { p.first, p.second };
-					if (field.GetRekt().Contains(point))
+					if (field.RevealAt(point))
 					{
-						if (field.RevealAt(point))
-						{
-							sndLose.Play();
-						}
+						sndLose.Play();
 					}
 				}
-				else if (e.GetType() == Mouse::Event::Type::RPress)
+			}
+			else if (e.GetType() == Mouse::Event::Type::RPress)
+			{
+				std::pair<int, int> p = e.GetPos();
+				const Vei2 point = { p.first, p.second };
+				if (fRekt.Contains(point))
 				{
-					std::pair<int, int> p = e.GetPos();
-					const Vei2 point = { p.first, p.second };
-					if (field.GetRekt().Contains(point))
+					if (field.FlagAt(point))
 					{
-						if (field.FlagAt(point))
-						{
-							sndWin.Play();
-						}
+						sndWin.Play();
 					}
 				}
-		}
+			}
+	}
 }
 
 void Game::ComposeFrame()

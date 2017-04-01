@@ -23,8 +23,9 @@ private:
 	public:
 		void SpawnMeme();
 		bool HasMeme() const;
-		void Draw(const Vei2& screenPos, const FieldState& fstate, Graphics& gfx) const;
+		void Draw(const Vei2& screenPos, const FieldState& fstate, Graphics& gfx);
 		void Reveal();
+		void SetPressed(bool pressed);
 		void ToggleFlag();
 		bool IsRevealed() const;
 		bool IsFlagged() const;
@@ -35,11 +36,13 @@ private:
 		State state = State::Hidden;
 		bool hasMeme = false;
 		int memesAround = -1;
+		bool isPressed = false;
 	};
 
 public:
 	MemeField(const int nMemes);
-	void Draw(Graphics& gfx) const;
+	void Draw(Graphics& gfx);
+	void PressAt(const Vei2& screenPos);
 	bool RevealAt(const Vei2& screenPos);
 	bool FlagAt(const Vei2& screenPos);
 	RectI GetRekt() const;

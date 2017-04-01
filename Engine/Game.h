@@ -65,6 +65,6 @@ private:
 //draw grid centered on screen _DONE
 //draw border around grid _DONE
 //add win/lose state and screen _DONE
-//add only as much flags as bombs
-//change mouse click so that holding the mouse "presses" the button, but action taken only when releasing left button
-//and draws tile button in pressed state under mouse while pressed
+//add only as much flags as bombs _DONE
+//change mouse click so that holding the mouse "presses" the button, but action taken only when releasing left button _DONE
+//and draws tile button in pressed state under mouse while pressed _DONE
