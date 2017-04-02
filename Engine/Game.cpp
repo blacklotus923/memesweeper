@@ -25,7 +25,7 @@ Game::Game( MainWindow& wnd )
 	:
 	wnd( wnd ),
 	gfx( wnd ),
-	field(Vei2{ Graphics::ScreenWidth / 2, Graphics::ScreenHeight / 2 }, 1)
+	field(Vei2{ Graphics::ScreenWidth / 2, Graphics::ScreenHeight / 2 }, 31)
 {
 }
 

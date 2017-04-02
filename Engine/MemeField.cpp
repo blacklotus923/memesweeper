@@ -196,10 +196,11 @@ bool MemeField::RevealAt(const Vei2 & screenPos)
 		assert(screenPos.x >= GetRekt().left && screenPos.x < GetRekt().right
 			&& screenPos.y >= GetRekt().top && screenPos.y < GetRekt().bottom);
 		Vei2 gridPos = ScreenToGrid(screenPos);
-		if (!TileAt(gridPos).IsRevealed() && !TileAt(gridPos).IsFlagged())
+		Tile& tile = TileAt(gridPos);
+		if (!tile.IsRevealed() && !tile.IsFlagged())
 		{
-			TileAt(gridPos).Reveal();
-			if (TileAt(gridPos).HasMeme())
+			RevealRecursive(gridPos);
+			if (tile.HasMeme())
 			{
 				fstate = FieldState::GameOver;
 				return true;
@@ -247,6 +248,30 @@ bool MemeField::FlagAt(const Vei2 & screenPos)
 		}
 	}
 	return false;
+}
+
+void MemeField::RevealRecursive(Vei2 & gridPos)
+{
+	Tile& tile = TileAt(gridPos);
+	const int xMin = std::max(0, gridPos.x - 1);
+	const int yMin = std::max(0, gridPos.y - 1);
+	const int xMax = std::min(width - 1, gridPos.x + 1);
+	const int yMax = std::min(height - 1, gridPos.y + 1);
+
+	if (!tile.IsRevealed())
+	{
+		tile.Reveal();
+		if (tile.GetMemesAround() == 0)
+		{
+			for (Vei2 gridPos = { xMin,yMin }; gridPos.y <= yMax; ++gridPos.y)
+			{
+				for (gridPos.x = xMin; gridPos.x <= xMax; ++gridPos.x)
+				{
+					RevealRecursive(gridPos);
+				}
+			}
+		}
+	}
 }
 
 MemeField::Tile & MemeField::TileAt(const Vei2& gridPos)

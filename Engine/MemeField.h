@@ -49,14 +49,15 @@ public:
 	FieldState GetFieldState() const;
 
 private:
+	void RevealRecursive(Vei2& gridPos);
 	Tile& TileAt(const Vei2& gridPos);
 	const Tile& TileAt(const Vei2& gridPos) const;
 	Vei2 ScreenToGrid(const Vei2& screenPos) const;
 	int GetMemesAroundTile(const Vei2 gridPos) const;
 
 private:
-	static constexpr int width = 5;
-	static constexpr int height = 5;
+	static constexpr int width = 24;
+	static constexpr int height = 20;
 	static constexpr int borderSize = 7;
 	static constexpr Color borderColor = { 69,69,69 };
 	int nMemes;
